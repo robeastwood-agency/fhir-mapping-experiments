@@ -1,0 +1,75 @@
+map "http://example/fhir/StructureMap/Coveragev14to4b" = "v1.4 to R4 Conversions for Coverage"
+
+uses "http://example.org/fhir/StructureDefinition/Coveragev14" alias Coveragev14 as source
+uses "http://example.org/fhir/StructureDefinition/CoverageR4" alias CoverageR4 as target
+
+group Coverage(source src : Coveragev14, target tgt : CoverageR4) {
+
+  // Coverage.issuerIdentifier
+
+  // Coverage.issuerReference
+  src.issuerReference as issuerreference -> tgt.payor = issuerreference "issuerreference1";  
+  src.issuer as issuer -> tgt.payor = issuer "issuerreference2";
+  src.issuer as issuer where $this.ofType(FHIR.Reference) -> tgt.payor = issuer "issuerreference3";
+  src.issuer as issuer where $this.ofType('Reference') -> tgt.payor = issuer "issuerreference4";  
+
+  // Coverage.bin
+
+  // Coverage.period
+  src.period as srcperiod -> tgt.period = srcperiod "period";
+
+  // Coverage.type (Coding) -> Coverage.type (CodeableConcept)
+  // src.type as srctype -> tgt.type as tgttype = create('CodeableConcept') then {
+  //   srctype -> tgttype.coding as coding then {
+  //     srctype.system as srcsystem -> coding.system = srcsystem "system";
+  //     srctype.code as srccode -> coding.code = srccode "code";
+  //     srctype.display as srcdisplay -> coding.display = srcdisplay "display";
+  //   } "coding";    
+  // } "type";
+
+  // Coverage.planholderIdentifier
+
+  // Coverage.planholderReference
+
+  // Coverage.beneficiaryIdentifier
+
+  // Coverage.beneficiaryReference
+  src.beneficiaryReference as srcbeneficiary -> tgt.beneficiary = srcbeneficiary "beneficiary";
+
+  // Coverage.relationship
+  src.relationship as srcrelationship -> tgt.relationship = create('CodeableConcept') as tgtrelationship then {
+    srcrelationship -> tgtrelationship.coding = create('Coding') as coding then {
+      srcrelationship.system as srcsystem -> coding.system = srcsystem "system";
+      srcrelationship.code as srccode -> coding.code = srccode "code";
+      srcrelationship.display as srcdisplay -> coding.display = srcdisplay "display";
+    }"coding";
+  }  "srcrelationship";
+  
+  // Coverage.identifier
+  src.identifier as srcidentifier -> tgt.identifier = srcidentifier "identifier";
+  
+  // Coverage.group
+  
+  // Coverage.plan
+  
+  // Coverage.subPlan
+  
+  // Coverage.dependent
+  src.dependent as srcdependent -> tgt.dependent = srcdependent "dependent";
+
+  // Coverage.sequence
+  
+  // Coverage.exception
+  
+  // Coverage.school
+  
+  // Coverage.network
+  src.network as srcnetwork -> tgt.network = srcnetwork "network" ;
+  
+  // Coverage.contract
+  src.contract as srccontract -> tgt.contract = srccontract "contract";
+  
+}
+
+
+

@@ -1,0 +1,35 @@
+@base_url =  https://test.ahdis.ch/matchbox/fhir/
+
+### ==========================================================================================
+
+POST {{base_url}}StructureMap
+Accept: application/fhir+xml
+Content-Type: text/fhir-mapping
+
+< ./inputs/maps/coveragev14toR4.map
+
+### ==========================================================================================
+
+POST {{base_url}}StructureMap/$transform
+?source=http://example/fhir/StructureMap/Coveragev14to4b
+Accept: application/fhir+xml
+Content-Type: application/fhir+xml
+
+< ./inputs/Coverage/example1.xml
+
+### ==========================================================================================
+
+POST {{base_url}}StructureDefinition
+Accept: application/fhir+xml
+Content-Type: application/fhir+xml
+
+< ./inputs/StructureDefinition/StructureDefinition-coverage-v14.xml
+
+### ==========================================================================================
+
+POST {{base_url}}StructureDefinition
+Accept: application/fhir+xml
+Content-Type: application/fhir+xml
+
+< ./inputs/StructureDefinition/StructureDefinition-coverage-R4.xml
+

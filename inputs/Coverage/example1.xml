@@ -1,0 +1,62 @@
+<Coverage xmlns="http://hl7.org/fhir">
+  <id value="9876B1"/>
+
+  <text>
+    <status value="generated"/>
+    <div xmlns="http://www.w3.org/1999/xhtml">A human-readable rendering of the coverage</div>
+  </text>
+
+  <!-- <issuerIdentifier>
+    <system value="http://benefitsinc.com/certificate"/>
+    <value value="12345"/>
+  </issuerIdentifier> -->
+
+  <issuerReference>
+    <reference value="Organization/2"/>
+  </issuerReference>
+
+  <period>
+    <start value="2014-05-23"/>
+    <end value="2012-05-23"/>
+  </period>
+
+  <type>
+    <system value="http://hl7.org/fhir/v3/ActCode"/>
+    <code value="EHCPOL"/>
+    <display value="extended healthcare"/>
+  </type>
+
+  <planholderReference>
+    <reference value="Patient/4"/>
+  </planholderReference>
+
+  <beneficiaryReference>
+    <reference value="Patient/4"/>
+  </beneficiaryReference>
+
+  <relationship>
+    <system value="http://example.org/codesystem/example-1"/>
+    <code value="self"/>
+  </relationship>
+
+  <identifier>
+    <system value="http://benefitsinc.com/certificate"/>
+    <value value="12345"/>
+  </identifier>
+
+  <plan value="CBI35"/>
+
+  <subPlan value="123"/>
+
+  <dependent value="1"/>
+
+  <sequence value="1"/>
+
+  <network value="test"/>
+
+  <contract>
+    <reference value="Contract/4"/>
+    <display value="Contract no 4"/>
+  </contract>
+
+</Coverage>
