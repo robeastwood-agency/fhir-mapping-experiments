@@ -20,7 +20,6 @@ Transform FHIR Coverage instances - from version [1.4](https://hl7.org/fhir/2016
       * `StructureDefinition.name` to `Coveragev14`
    * saved here: [StructureDefinition-coverage-v14.xml](inputs/StructureDefinition/StructureDefinition-coverage-v14.xml)
    * POSTed to matchbox using [this REST request](transform-coverage.http#L6-L10)
-      * sfdsdf
 
 1. Coverage **R4** StructureDefinition
    * downloaded from the FHIR spec here https://hl7.org/fhir/R4/coverage.profile.xml.html
@@ -30,11 +29,10 @@ Transform FHIR Coverage instances - from version [1.4](https://hl7.org/fhir/2016
       * `StructureDefinition.name` to `CoverageR4`   
    * saved here: [StructureDefinition-coverage-R4.xml](inputs/StructureDefinition/StructureDefinition-coverage-R4.xml)
    * POSTed to matchbox using [this REST request](https://github.com/robeastwood-agency/fhir-mapping-experiments/blob/main/transform-coverage.http#L15-L19)
-      * sfdsdf
 
 1. FML map file
    * created FML file: [coveragev14toR4.map](inputs/maps/coveragev14toR4.map)
-   * Added the above 2 URLs into the map file as *source* and *target* (see [here](coveragev14toR4.map#L3-L4))
+   * Added the above 2 URLs into the map file as *source* and *target* (see [here](inputs/maps/coveragev14toR4.map#L3-L4))
    * added FML rules to transform various v1.4 elements to respective R4 elements
 
 1. v1.4 example Coverage instance
@@ -48,10 +46,34 @@ Transform FHIR Coverage instances - from version [1.4](https://hl7.org/fhir/2016
 1. Transform result
    * an instance of Coverage is successfully generated, however there are some gaps - see below
 
+<details>
+<summary>Transformed output</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Coverage xmlns="http://hl7.org/fhir">
+  <identifier>
+    <system value="http://benefitsinc.com/certificate"/>
+    <value value="12345"/>
+  </identifier>
+  <dependent value="1"/>
+  <period>
+    <start value="2014-05-23"/>
+    <end value="2012-05-23"/>
+  </period>
+  <network value="test"/>
+  <contract>
+    <reference value="Contract/4"/>
+    <display value="Contract no 4"/>
+  </contract>
+</Coverage>
+```
+</details>
+
 ### Transform gaps
 
 1. `Coverage.issuerReference` -> `Coverage.payor`
-   * v1.4 Coverage.issuerReference is member of choice group `Coverage.issuer` and is of datatype `Reference`
+   * v1.4 `Coverage.issuerReference` is member of choice group `Coverage.issuer` and is of datatype `Reference`
    * R4 `Coverage.payor` is of datatype `Reference`
    * a [number of rule variations](inputs/maps/coveragev14toR4.map#L10-L14) have not yet yielded a successful transform
    * note that a transform of `Coverage.contract` -> `Coverage.contract` (also datatype `Reference`) does yield success
@@ -63,4 +85,4 @@ Transform FHIR Coverage instances - from version [1.4](https://hl7.org/fhir/2016
    * cannot figure out how to transform these elements:
       * `Coverage.type` (Coding) -> `Coverage.type` (CodeableConcept)
       * `Coverage.relationship` (Coding) -> `Coverage.relationship` (CodeableConcept)
-   * see attempt [here](inputs/maps/coveragev14toR4.map#L32C5-L39)
+   * see rule attempt [here](inputs/maps/coveragev14toR4.map#L32C5-L39)
