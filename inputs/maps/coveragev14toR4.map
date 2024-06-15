@@ -1,4 +1,4 @@
-map "http://example/fhir/StructureMap/Coveragev14to4b" = "v1.4 to R4 Conversions for Coverage"
+map "http://example/fhir/StructureMap/Coveragev14to4" = "v1.4 to R4 Conversions for Coverage"
 
 uses "http://example.org/fhir/StructureDefinition/Coveragev14" alias Coveragev14 as source
 uses "http://example.org/fhir/StructureDefinition/CoverageR4" alias CoverageR4 as target
@@ -7,25 +7,18 @@ group Coverage(source src : Coveragev14, target tgt : CoverageR4) {
 
   // Coverage.issuerIdentifier
 
-  // Coverage.issuerReference
+  // Coverage.issuerReference -> Coverage.payor (4 attempts)
   src.issuerReference as issuerreference -> tgt.payor = issuerreference "issuerreference1";  
-  src.issuer as issuer -> tgt.payor = issuer "issuerreference2";
-  src.issuer as issuer where $this.ofType(FHIR.Reference) -> tgt.payor = issuer "issuerreference3";
-  src.issuer as issuer where $this.ofType('Reference') -> tgt.payor = issuer "issuerreference4";  
+  src.issuer as issuer2 -> tgt.payor = issuer2 "issuerreference2";
+  src.issuer as issuer3 where $this.ofType(FHIR.Reference) -> tgt.payor = issuer3 "issuerreference3";
+  src.issuer as issuer4 where $this.ofType('Reference') -> tgt.payor = issuer4 "issuerreference4";  
 
   // Coverage.bin
 
-  // Coverage.period
+  // Coverage.period -> Coverage.period
   src.period as srcperiod -> tgt.period = srcperiod "period";
 
   // Coverage.type (Coding) -> Coverage.type (CodeableConcept)
-  // src.type as srctype -> tgt.type as tgttype = create('CodeableConcept') then {
-  //   srctype -> tgttype.coding as coding then {
-  //     srctype.system as srcsystem -> coding.system = srcsystem "system";
-  //     srctype.code as srccode -> coding.code = srccode "code";
-  //     srctype.display as srcdisplay -> coding.display = srcdisplay "display";
-  //   } "coding";    
-  // } "type";
 
   // Coverage.planholderIdentifier
 
@@ -33,10 +26,10 @@ group Coverage(source src : Coveragev14, target tgt : CoverageR4) {
 
   // Coverage.beneficiaryIdentifier
 
-  // Coverage.beneficiaryReference
+  // Coverage.beneficiaryReference -> Coverage.beneficiary
   src.beneficiaryReference as srcbeneficiary -> tgt.beneficiary = srcbeneficiary "beneficiary";
 
-  // Coverage.relationship
+  // Coverage.relationship (Coding) -> Coverage.relationship (CodeableConcept) 
   src.relationship as srcrelationship -> tgt.relationship = create('CodeableConcept') as tgtrelationship then {
     srcrelationship -> tgtrelationship.coding = create('Coding') as coding then {
       srcrelationship.system as srcsystem -> coding.system = srcsystem "system";
@@ -45,7 +38,7 @@ group Coverage(source src : Coveragev14, target tgt : CoverageR4) {
     }"coding";
   }  "srcrelationship";
   
-  // Coverage.identifier
+  // Coverage.identifier -> Coverage.identifier
   src.identifier as srcidentifier -> tgt.identifier = srcidentifier "identifier";
   
   // Coverage.group
@@ -54,7 +47,7 @@ group Coverage(source src : Coveragev14, target tgt : CoverageR4) {
   
   // Coverage.subPlan
   
-  // Coverage.dependent
+  // Coverage.dependent -> Coverage.dependent
   src.dependent as srcdependent -> tgt.dependent = srcdependent "dependent";
 
   // Coverage.sequence
@@ -63,13 +56,10 @@ group Coverage(source src : Coveragev14, target tgt : CoverageR4) {
   
   // Coverage.school
   
-  // Coverage.network
+  // Coverage.network -> Coverage.network
   src.network as srcnetwork -> tgt.network = srcnetwork "network" ;
   
-  // Coverage.contract
+  // Coverage.contract -> Coverage.contract 
   src.contract as srccontract -> tgt.contract = srccontract "contract";
   
 }
-
-
-
