@@ -1,23 +1,7 @@
 @base_url =  https://test.ahdis.ch/matchbox/fhir/
 
 ### ==========================================================================================
-
-POST {{base_url}}StructureMap
-Accept: application/fhir+xml
-Content-Type: text/fhir-mapping
-
-< ./inputs/maps/coveragev14toR4.map
-
-### ==========================================================================================
-
-POST {{base_url}}StructureMap/$transform
-?source=http://example/fhir/StructureMap/Coveragev14to4b
-Accept: application/fhir+xml
-Content-Type: application/fhir+xml
-
-< ./inputs/Coverage/example1.xml
-
-### ==========================================================================================
+# 1) POST the FHIR StructureDefinition of v1.4 Coverage
 
 POST {{base_url}}StructureDefinition
 Accept: application/fhir+xml
@@ -26,10 +10,30 @@ Content-Type: application/fhir+xml
 < ./inputs/StructureDefinition/StructureDefinition-coverage-v14.xml
 
 ### ==========================================================================================
+# 2) POST the FHIR StructureDefinition of R4 Coverage
 
 POST {{base_url}}StructureDefinition
 Accept: application/fhir+xml
 Content-Type: application/fhir+xml
 
 < ./inputs/StructureDefinition/StructureDefinition-coverage-R4.xml
+
+### ==========================================================================================
+# 3) POST the FML file to matchbox to generate StructureMap
+
+POST {{base_url}}StructureMap
+Accept: application/fhir+xml
+Content-Type: text/fhir-mapping
+
+< ./inputs/maps/coveragev14toR4.map
+
+### ==========================================================================================
+# 4) invoke a transform operation using the generated StructureMap from the above operation 
+
+POST {{base_url}}StructureMap/$transform
+?source=http://example/fhir/StructureMap/Coveragev14to4
+Accept: application/fhir+xml
+Content-Type: application/fhir+xml
+
+< ./inputs/Coverage/example1.xml
 
